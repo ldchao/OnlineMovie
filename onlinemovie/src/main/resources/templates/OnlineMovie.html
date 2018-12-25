@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>视频观影</title>
+    <style>
+        #connect_video {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        video {
+            width: 264px;
+            height: 198px;
+            /*border: 1px solid black;*/
+        }
+
+        div {
+            display: inline-block;
+        }
+
+        video#bgvid {
+
+            position: fixed;
+            right: 0;
+            top: 0;
+
+            min-width: 75%;
+            min-height: 75%;
+
+            width: 75%;
+            height: auto;
+            z-index: -100;
+
+            /*background: url("/image/background.png") no-repeat;*/
+
+            background-size: cover;
+        }
+
+        #backgroud {
+
+            position: fixed;
+            right: 0;
+            bottom: 0;
+
+            min-width: 100%;
+            min-height: 100%;
+
+            width: auto;
+            height: auto;
+            z-index: -101;
+
+            background: url("/image/background.png") no-repeat;
+
+            background-size: cover;
+
+        }
+    </style>
+</head>
+
+<body>
+
+
+<div id="setup" style="display: none">
+    <p>WebRTC 视频观影demo测试</p>
+    <p>
+        Key:
+        <input type="text" name="key" id="key" onkeyup="if (event.keyCode === 13) {connect();return false;}"
+               th:value="${roomId}" />
+        <button id="connect" onclick="connect()">连接</button>
+        <span id="statusline" style="display:none">状态：
+            <span id="status">已断开</span>
+        </span>
+        <button id="call" style="display:none" onclick="call()">呼叫</button>
+    </p>
+</div>
+
+<div id="scMessage" style="float:right;display:none">
+    <p>信道消息：
+        <input type="text" width="100%" name="message" id="message"
+               onkeyup="if (event.keyCode === 13){send();return false;}"/>
+        <button id="send" style="display:none" onclick="send()">发送</button>
+    </p>
+
+    <p>响应：
+        <span id="response"></span>
+    </p>
+</div>
+
+<br/>
+
+<!--<video class = "object-fit: fill;" controls>-->
+<!--<source src="http://he.yinyuetai.com/uploads/videos/common/6609014F06AE1C8E99DE142502A2B157.flv" type="video/mp4"/>-->
+<!--您的浏览器不支持 HTML5 video 标签。-->
+<!--</video>-->
+
+<video autoplay id="bgvid" loop controls>
+
+    <source src="http://he.yinyuetai.com/uploads/videos/common/6609014F06AE1C8E99DE142502A2B157.flv" type="video/mp4"/>
+    您的浏览器不支持 HTML5 video 标签。
+
+</video>
+
+<div id="backgroud">
+
+</div>
+
+<div id="connect_video">
+    <div>
+        <video autoplay="autoplay" id="myVideo" controls muted="true"></video>
+    </div>
+    <p style="display:none">
+        <b>发出的消息</b>
+        <br/>
+        <textarea id="outmessages" style="width:100%" rows="30"></textarea>
+    </p>
+    <div>
+        <video id="yourVideo" autoplay="autoplay" controls muted="true"></video>
+    </div>
+    <p style="display:none">
+        <b>收到的消息</b>
+        <br/>
+        <textarea id="inmessages" style="width:100%" rows="30"></textarea>
+    </p>
+</div>
+
+<!--<div style="position:absolute;bottom:0;left:264px;">-->
+<!--<div>-->
+<!--<video id="yourVideo" autoplay="autoplay" controls muted="true"></video>-->
+<!--</div>-->
+<!--<p style="display:none">-->
+<!--<b>收到的消息</b>-->
+<!--<br/>-->
+<!--<textarea id="inmessages" style="width:100%" rows="30"></textarea>-->
+<!--</p>-->
+<!--</div>-->
+
+<!--<script src="https://webrtc.github.io/adapter/adapter.js" type="text/javascript"></script>-->
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<!--<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>-->
+<script src="/js/adapter.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="/js/clientXHRSignaling.js"></script>
+<script type="text/javascript" src="/js/p2p.js"></script>
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+spring:
+#  profiles:
+#    active: prod
+  datasource:
+      username: root
+      password: ldchao
+      url: jdbc:mysql://47.101.199.12:3306/demo
+      driver-class-name: com.mysql.jdbc.Driver
+#  jpa:
+#     hibernate:
+#        ddl-auto: none
+#     show-sql: false
+#     database-platform: org.hibernate.dialect.MySQL5Dialect
+  application:
+     name: OnlineMovie
+  thymeleaf:
+     mode: LEGACYHTML5
+     cache: false
+
+server:
+  port: 8080
