@@ -9,7 +9,7 @@
     <link href="/css/OnlineMovie.css" rel="stylesheet" type="text/css"/>
 </head>
 
-<body >
+<body>
 <div id="backgroud"></div>
 
 <div id="setup" style="display: none">
@@ -17,7 +17,7 @@
     <p>
         Key:
         <input type="text" name="key" id="key" onkeyup="if (event.keyCode === 13) {connect();return false;}"
-               th:value="${roomId}" />
+               th:value="${roomId}"/>
         <button id="connect" onclick="connect()">连接</button>
         <span id="statusline" style="display:none">状态：
             <span id="status">已断开</span>
@@ -48,20 +48,20 @@
 
 <div id="connect_video">
     <!--<div>-->
-        <video  class="video_chat" autoplay="autoplay" id="myVideo" controls muted="true"></video>
+    <video class="video_chat" autoplay="autoplay" id="myVideo" controls muted="true"></video>
     <!--</div>-->
     <!--<p style="display:none">-->
-        <!--<b>发出的消息</b>-->
-        <!--<br/>-->
-        <!--<textarea id="outmessages" style="width:100%" rows="30"></textarea>-->
+    <!--<b>发出的消息</b>-->
+    <!--<br/>-->
+    <!--<textarea id="outmessages" style="width:100%" rows="30"></textarea>-->
     <!--</p>-->
     <!--<div>-->
-        <video class="video_chat" id="yourVideo" autoplay="autoplay" controls muted="true"></video>
+    <video class="video_chat" id="yourVideo" autoplay="autoplay" controls muted="true" style="display: none"></video>
     <!--</div>-->
     <!--<p style="display:none">-->
-        <!--<b>收到的消息</b>-->
-        <!--<br/>-->
-        <!--<textarea id="inmessages" style="width:100%" rows="30"></textarea>-->
+    <!--<b>收到的消息</b>-->
+    <!--<br/>-->
+    <!--<textarea id="inmessages" style="width:100%" rows="30"></textarea>-->
     <!--</p>-->
 </div>
 
@@ -74,10 +74,10 @@
 <script type="text/javascript" src="/js/clientXHRSignaling.js"></script>
 <script type="text/javascript" src="/js/p2p.js"></script>
 <script>
-        $(function (){
-            var aa = $(".video_chat").innerHeight();
-            $(".video_chat").css('width',aa*0.75);
-        })
+//    $(function () {
+//        var aa = $(".video_chat").innerHeight();
+//        $(".video_chat").css('width', aa * 0.75);
+//    })
 </script>
 
 </body>

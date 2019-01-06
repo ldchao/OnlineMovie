@@ -16,7 +16,6 @@ var signalingChannel, key, id,
 // 自动开始获取本地媒体
 window.onload = function () {
     myVideo = document.getElementById('myVideo');
-    yourVideo = document.getElementById('yourVideo');
     getMedia();
     connect()
 };
@@ -30,9 +29,9 @@ function connect() {
     // 处理通过信令通道收到的所有消息
     handleMsg = function (msg) {
         // var msgE = document.getElementById('inmessages');
-        var msgString = JSON.stringify(msg).replace(/\\r\\n/g, '\n');
+        // var msgString = JSON.stringify(msg).replace(/\\r\\n/g, '\n');
         // msgE.value = msgString + '\n' + msgE.value;    // 将最新的消息放置在最上方
-        console.log('msgString:', msgString);
+        // console.log('msgString:', msgString);
         if (msg.type === 'offer') {
             pc.setRemoteDescription(new RTCSessionDescription(msg));
             answer()
@@ -151,9 +150,19 @@ function onIceCandidate(e) {
 
 // 如果我们浏览器检测到另一端加入了媒体流，则将其显示在屏幕上
 function onRemoteStreamAdded(e) {
+// <video class="video_chat" id="yourVideo" autoplay="autoplay" controls muted="true" style="display: none"></video>
+    videoChats = document.getElementById('connect_video');
+
+    yourVideo = document.createElement("video");
+    yourVideo.setAttribute('class','video_chat');
+    yourVideo.setAttribute('autoplay','autoplay');
+    yourVideo.setAttribute('controls','controls');
+    yourVideo.setAttribute('muted','true');
+
     yourVideoStream = e.stream;
-    console.log('yourVideo: ', yourVideo);
+    // console.log('yourVideo: ', yourVideo);
     yourVideo.srcObject = yourVideoStream;
+    videoChats.appendChild(yourVideo);
     setStatus('On call')
 }
 
