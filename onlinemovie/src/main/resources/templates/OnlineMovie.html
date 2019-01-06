@@ -8,37 +8,37 @@
     <title>视频观影</title>
     <style>
         #connect_video {
-            position: absolute;
+            position: fixed;
             bottom: 0;
             left: 0;
+            width: 100%;
+            /*height: auto;*/
+            height: 25%;
+            text-align: center;
         }
 
-        video {
-            width: 264px;
-            height: 198px;
+        .video_chat{
+            display: inline-block;
+            /*width: auto;*/
+            height: 100%;
             /*border: 1px solid black;*/
         }
 
-        div {
-            display: inline-block;
-        }
 
         video#bgvid {
 
             position: fixed;
-            right: 0;
+            left: 12.5%;
             top: 0;
 
             min-width: 75%;
             min-height: 75%;
 
             width: 75%;
-            height: auto;
+            /*height: auto;*/
+            height: 75%;
             z-index: -100;
 
-            /*background: url("/image/background.png") no-repeat;*/
-
-            background-size: cover;
         }
 
         #backgroud {
@@ -54,7 +54,7 @@
             height: auto;
             z-index: -101;
 
-            background: url("/image/background.png") no-repeat;
+            background: #000000;
 
             background-size: cover;
 
@@ -62,7 +62,7 @@
     </style>
 </head>
 
-<body>
+<body >
 
 
 <div id="setup" style="display: none">
@@ -105,50 +105,42 @@
 
 </video>
 
-<div id="backgroud">
-
-</div>
+<div id="backgroud"></div>
 
 <div id="connect_video">
-    <div>
-        <video autoplay="autoplay" id="myVideo" controls muted="true"></video>
-    </div>
-    <p style="display:none">
-        <b>发出的消息</b>
-        <br/>
-        <textarea id="outmessages" style="width:100%" rows="30"></textarea>
-    </p>
-    <div>
-        <video id="yourVideo" autoplay="autoplay" controls muted="true"></video>
-    </div>
-    <p style="display:none">
-        <b>收到的消息</b>
-        <br/>
-        <textarea id="inmessages" style="width:100%" rows="30"></textarea>
-    </p>
+    <!--<div>-->
+        <video  class="video_chat" autoplay="autoplay" id="myVideo" controls muted="true"></video>
+    <!--</div>-->
+    <!--<p style="display:none">-->
+        <!--<b>发出的消息</b>-->
+        <!--<br/>-->
+        <!--<textarea id="outmessages" style="width:100%" rows="30"></textarea>-->
+    <!--</p>-->
+    <!--<div>-->
+        <video class="video_chat" id="yourVideo" autoplay="autoplay" controls muted="true"></video>
+    <!--</div>-->
+    <!--<p style="display:none">-->
+        <!--<b>收到的消息</b>-->
+        <!--<br/>-->
+        <!--<textarea id="inmessages" style="width:100%" rows="30"></textarea>-->
+    <!--</p>-->
 </div>
 
-<!--<div style="position:absolute;bottom:0;left:264px;">-->
-<!--<div>-->
-<!--<video id="yourVideo" autoplay="autoplay" controls muted="true"></video>-->
-<!--</div>-->
-<!--<p style="display:none">-->
-<!--<b>收到的消息</b>-->
-<!--<br/>-->
-<!--<textarea id="inmessages" style="width:100%" rows="30"></textarea>-->
-<!--</p>-->
-<!--</div>-->
 
 <!--<script src="https://webrtc.github.io/adapter/adapter.js" type="text/javascript"></script>-->
 
 <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
-<!--<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>-->
-<script src="/js/adapter.js" type="text/javascript"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/js/adapter.js" type="text/javascript"></script>
 <script type="text/javascript" src="/js/clientXHRSignaling.js"></script>
 <script type="text/javascript" src="/js/p2p.js"></script>
-<script type="text/javascript">
-
+<script>
+        $(function (){
+            var aa = $(".video_chat").innerHeight();
+//            alert(aa)
+            $(".video_chat").css('width',aa*0.75);
+        })
 </script>
+
 </body>
 </html>

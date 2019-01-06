@@ -15,11 +15,6 @@ var signalingChannel, key, id,
 
 // 自动开始获取本地媒体
 window.onload = function () {
-    // if (queryParams && queryParams['key']) {    // 加载空白脚本中预置的queryParams参数
-    //     document.getElementById('key').value = queryParams['key'];
-    //     connect()
-    // }
-
     myVideo = document.getElementById('myVideo');
     yourVideo = document.getElementById('yourVideo');
     getMedia();
@@ -34,17 +29,17 @@ function connect() {
     key = document.getElementById('key').value;
     // 处理通过信令通道收到的所有消息
     handleMsg = function (msg) {
-        var msgE = document.getElementById('inmessages');
-        // language=JSRegexp
+        // var msgE = document.getElementById('inmessages');
+
         var msgString = JSON.stringify(msg).replace(/\\r\\n/g, '\n');
-        msgE.value = msgString + '\n' + msgE.value;    // 将最新的消息放置在最上方
+        // msgE.value = msgString + '\n' + msgE.value;    // 将最新的消息放置在最上方
         console.log('msgString:', msgString);
-        if (msg.type == 'offer') {
+        if (msg.type === 'offer') {
             pc.setRemoteDescription(new RTCSessionDescription(msg));
             answer()
-        } else if (msg.type == 'answer') {
+        } else if (msg.type === 'answer') {
             pc.setRemoteDescription(new RTCSessionDescription(msg))
-        } else if (msg.type == 'candidate') {
+        } else if (msg.type === 'candidate') {
             pc.addIceCandidate(new RTCIceCandidate({
                 sdpMLineIndex: msg.mlineindex,
                 candidate: msg.candidate
@@ -80,9 +75,9 @@ function send(msg) {
     };
     msg = msg || document.getElementById('message').value;   // 没有消息则获取信道消息
     // 发布到屏幕上
-    msgE = document.getElementById('outmessages');
-    var msgString = JSON.stringify(msg).replace(/\\r\\n/g, '\n');
-    msgE.value = msgString + '\n' + msgE.value;
+    // msgE = document.getElementById('outmessages');
+    // var msgString = JSON.stringify(msg).replace(/\\r\\n/g, '\n');
+    // msgE.value = msgString + '\n' + msgE.value;
     // 通过信令通道发送出去
     signalingChannel.send(msg, handler)
 }
@@ -112,19 +107,8 @@ function gotUserMedia(stream) {
 function createPC() {
     var stunUri = true,
         turnUri = false,
-        // myfalse = function (v) {
-        //     return ((v === '0') || (v === 'false') || (!v))
-        // },
         config = [];
-    // 基于各个查询参数调整配置字符串
-    // if (queryParams) {
-    //     if ('stunUri' in queryParams) {
-    //         stunUri = !myfalse(queryParams['stunUri'])
-    //     }
-    //     if ('turnUri' in queryParams) {
-    //         turnUri = !myfalse(queryParams['turnUri'])
-    //     }
-    // }
+
     if (stunUri) {
         config.push({
             url: 'stun:stunserver.org'
@@ -187,9 +171,6 @@ function attachMediaIfReady() {
 function attachMedia() {
     pc.addStream(myVideoStream);
     setStatus('Ready for call');
-    // if (queryParams && queryParams['call'] && !weWaited) {
-    //     call()
-    // }
 }
 
 // 生成一个offer
