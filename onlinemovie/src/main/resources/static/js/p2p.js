@@ -30,7 +30,6 @@ function connect() {
     // 处理通过信令通道收到的所有消息
     handleMsg = function (msg) {
         // var msgE = document.getElementById('inmessages');
-
         var msgString = JSON.stringify(msg).replace(/\\r\\n/g, '\n');
         // msgE.value = msgString + '\n' + msgE.value;    // 将最新的消息放置在最上方
         console.log('msgString:', msgString);

@@ -6,64 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>视频观影</title>
-    <style>
-        #connect_video {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            /*height: auto;*/
-            height: 25%;
-            text-align: center;
-        }
-
-        .video_chat{
-            display: inline-block;
-            /*width: auto;*/
-            height: 100%;
-            /*border: 1px solid black;*/
-        }
-
-
-        video#bgvid {
-
-            position: fixed;
-            left: 12.5%;
-            top: 0;
-
-            min-width: 75%;
-            min-height: 75%;
-
-            width: 75%;
-            /*height: auto;*/
-            height: 75%;
-            z-index: -100;
-
-        }
-
-        #backgroud {
-
-            position: fixed;
-            right: 0;
-            bottom: 0;
-
-            min-width: 100%;
-            min-height: 100%;
-
-            width: auto;
-            height: auto;
-            z-index: -101;
-
-            background: #000000;
-
-            background-size: cover;
-
-        }
-    </style>
+    <link href="/css/OnlineMovie.css" rel="stylesheet" type="text/css"/>
 </head>
 
 <body >
-
+<div id="backgroud"></div>
 
 <div id="setup" style="display: none">
     <p>WebRTC 视频观影demo测试</p>
@@ -93,19 +40,11 @@
 
 <br/>
 
-<!--<video class = "object-fit: fill;" controls>-->
-<!--<source src="http://he.yinyuetai.com/uploads/videos/common/6609014F06AE1C8E99DE142502A2B157.flv" type="video/mp4"/>-->
-<!--您的浏览器不支持 HTML5 video 标签。-->
-<!--</video>-->
-
 <video autoplay id="bgvid" loop controls>
-
     <source src="http://he.yinyuetai.com/uploads/videos/common/6609014F06AE1C8E99DE142502A2B157.flv" type="video/mp4"/>
     您的浏览器不支持 HTML5 video 标签。
-
 </video>
 
-<div id="backgroud"></div>
 
 <div id="connect_video">
     <!--<div>-->
@@ -131,13 +70,12 @@
 
 <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
-<script type="text/javascript" src="/js/adapter.js" type="text/javascript"></script>
+<script type="text/javascript" src="/js/adapter.js"></script>
 <script type="text/javascript" src="/js/clientXHRSignaling.js"></script>
 <script type="text/javascript" src="/js/p2p.js"></script>
 <script>
         $(function (){
             var aa = $(".video_chat").innerHeight();
-//            alert(aa)
             $(".video_chat").css('width',aa*0.75);
         })
 </script>
