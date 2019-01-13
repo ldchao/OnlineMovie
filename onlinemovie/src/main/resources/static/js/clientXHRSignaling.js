@@ -1,6 +1,6 @@
 var createSignalingChannel = function (key, handlers) {
 
-    var id, status,
+    var id, status, socket,
         doNothing = function () {
         },
         initHandler = function (h) {
@@ -15,135 +15,54 @@ var createSignalingChannel = function (key, handlers) {
     function connect(failureCB) {
         failureCB = ((typeof failureCB === 'function') && failureCB) || doNothing;
 
-        // Handle connection response, which should be error or status
-        //  of "connected" or "waiting"
-        function handler() {
-            if (this.readyState == this.DONE) {
-                if (this.status == 200 && this.response != null) {
-                    var res = JSON.parse(this.response);
-                    if (res.err) {
-                        failureCB("error:  " + res.err);
-                        return;
-                    }
 
-                    // if no error, save status and server-generated id,
-                    // then start asynchronous polling for messages
-                    id = res.id;
-                    status = res.status;
-                    poll();
+        if(typeof(WebSocket) === "undefined") {
+            console.log("您的浏览器不支持WebSocket");
+        }else {
+            console.log("您的浏览器支持WebSocket");
 
-                    // run user-provided handlers for waiting and connected
-                    // states
-                    if (status == "waiting") {
-                        waitingHandler();
-                    } else {
-                        connectedHandler();
-                    }
-                } else {
-                    failureCB("HTTP error:  " + this.status);
-                }
-            }
-        }
+            socket = new WebSocket("ws://"+location.host+"/websocket/" + key);
+            //打开事件
+            socket.onopen = function () {
+                status = "waiting";
+                waitingHandler();
+                // socket.send("这是来自客户端的消息" + location.href + new Date());
+            };
 
-        // open XHR and send the connection request with the key
-        var client = new XMLHttpRequest();
-        client.onreadystatechange = handler;
-        client.open("GET", "/connect?key=" + key);
-        client.send();
-    }
+            //获得消息事件
+            socket.onmessage = function(msg) {
+                console.log(msg.data);
+                // $("#message").val(msg.data)
+                //发现消息进入 开始处理前端触发逻辑
 
-    // poll() waits n ms between gets to the server.  n is at 10 ms
-    // for 10 tries, then 100 ms for 10 tries, then 1000 ms from then
-    // on. n is reset to 10 ms if a message is actually received.
-    function poll() {
-        // var msgs;
-        var pollWaitDelay = (function () {
-            var delay = 10, counter = 1;
-
-            function reset() {
-                delay = 10;
-                counter = 1;
-            }
-
-            function increase() {
-                counter += 1;
-                if (counter > 10) {
-                    delay = 100;
-                } else if (counter > 20) {
-                    delay = 1000;
-                }                             // else leave delay at 10
-            }
-
-            function value() {
-                return delay;
-            }
-
-            return {reset: reset, increase: increase, value: value};
-        }());
-
-        // getLoop is defined and used immediately here.  It retrieves
-        // messages from the server and then schedules itself to run
-        // again after pollWaitDelay.value() milliseconds.
-        (function getLoop() {
-            get(function (response) {
-                var i, msgs = (response && response.msgs) || [];
+                var res = JSON.parse(msg.data);
 
                 // if messages property exists, then we are connected
-                if (response.msgs && (status !== "connected")) {
+                if (status !== "connected") {
                     // switch status to connected since it is now!
                     status = "connected";
                     connectedHandler();
                 }
-                if (msgs.length > 0) {           // we got messages
-                    pollWaitDelay.reset();
-                    for (i = 0; i < msgs.length; i += 1) {
-                        handleMessage(msgs[i]);
-                    }
-                } else {                         // didn't get any messages
-                    pollWaitDelay.increase();
-                }
 
-                // now set timer to check again
-                setTimeout(getLoop, pollWaitDelay.value());
-            });
-        }());
-    }
+                handleMessage(res)
 
+            };
 
-    // This function is part of the polling setup to check for
-    // messages from the other browser.  It is called by getLoop()
-    // inside poll().
-    function get(getResponseHandler) {
+            //关闭事件
+            socket.onclose = function() {
+                console.log("Socket已关闭");
+                // $("#close").val("Socket已关闭")
+            };
 
-        // response should either be error or a JSON object.  If the
-        // latter, send it to the user-provided handler.
-        function handler() {
-            if (this.readyState == this.DONE) {
-                if (this.status == 200 && this.response != null) {
-                    var res = JSON.parse(this.response);
-                    if (res.err) {
-                        getResponseHandler("error:  " + res.err);
-                        return;
-                    }
-                    getResponseHandler(res);
-                    return res;
-                } else {
-                    getResponseHandler("HTTP error:  " + this.status);
-                }
+            //发生了错误事件
+            socket.onerror = function() {
+                failureCB("Socket发生了错误");
             }
+
         }
-
-        // open XHR and request messages for my id
-        var client = new XMLHttpRequest();
-        client.onreadystatechange = handler;
-        client.open("POST", "/get");
-        client.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        client.send("id=" + id);
     }
-
 
     // Schedule incoming messages for asynchronous handling.
-    // This is used by getLoop() in poll().
     function handleMessage(msg) {   // process message asynchronously
         setTimeout(function () {
             messageHandler(msg);
@@ -152,32 +71,8 @@ var createSignalingChannel = function (key, handlers) {
 
 
     // Send a message to the other browser on the signaling channel
-    function send(msg, responseHandler) {
-        responseHandler = responseHandler || doNothing;
-
-        // parse response and send to handler
-        function handler() {
-            if (this.readyState == this.DONE) {
-                if (this.status == 200 && this.response != null) {
-                    var res = JSON.parse(this.response);
-                    if (res.err) {
-                        responseHandler("error:  " + res.err);
-                        return;
-                    }
-                    responseHandler(res.msg);
-                } else {
-                    responseHandler("HTTP error:  " + this.status);
-                }
-            }
-        }
-
-        // open XHR and send my id and message as JSON string
-        var client = new XMLHttpRequest();
-        client.onreadystatechange = handler;
-        client.open("POST", "/send");
-        client.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        var sendData = "id=" + id + "&message=" + JSON.stringify(msg);
-        client.send(sendData);
+    function send(msg) {
+        socket.send(JSON.stringify(msg));
     }
 
 

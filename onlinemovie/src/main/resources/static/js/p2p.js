@@ -1,6 +1,5 @@
 var signalingChannel, key, id,
     haveLocalMedia = false,
-    weWaited = false,
     myVideoStream, myVideo,
     yourVideoStream, yourVideo,
     doNothing = function () {
@@ -47,7 +46,6 @@ function connect() {
     scHandlers = {
         'onWaiting': function () {
             setStatus('Waiting');
-            weWaited = true
         },
         'onConnected': function () {
             setStatus('Connected');
@@ -68,16 +66,10 @@ function connect() {
 
 // 通过信道发送消息
 function send(msg) {
-    var handler = function (res) {
-        document.getElementById('response').innerHTML = res;
-    };
     msg = msg || document.getElementById('message').value;   // 没有消息则获取信道消息
-    // 发布到屏幕上
-    // msgE = document.getElementById('outmessages');
-    // var msgString = JSON.stringify(msg).replace(/\\r\\n/g, '\n');
-    // msgE.value = msgString + '\n' + msgE.value;
+
     // 通过信令通道发送出去
-    signalingChannel.send(msg, handler)
+    signalingChannel.send(msg)
 }
 
 // 获取本地媒体
