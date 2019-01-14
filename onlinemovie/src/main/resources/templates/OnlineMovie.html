@@ -10,6 +10,30 @@
 </head>
 
 <body>
+<script type="text/javascript" src="/js/annyang.min.js"></script>
+<script>
+    if (annyang) {
+        // Let's define a command.
+        var commands = {
+            'hello': function () {
+                alert('Hello world!');
+            },
+            'another room': function () {
+                window.location.href = document.referrer;
+            },
+            'log out': function () {
+                window.history.go(-2);
+            }
+
+        };
+
+        // Add our commands to annyang
+        annyang.addCommands(commands);
+
+        // Start listening.
+        annyang.start();
+    }
+</script>
 <div id="backgroud"></div>
 
 <div id="setup" style="display: none">
@@ -74,10 +98,10 @@
 <script type="text/javascript" src="/js/clientXHRSignaling.js"></script>
 <script type="text/javascript" src="/js/p2p.js"></script>
 <script>
-//    $(function () {
-//        var aa = $(".video_chat").innerHeight();
-//        $(".video_chat").css('width', aa * 0.75);
-//    })
+    //    $(function () {
+    //        var aa = $(".video_chat").innerHeight();
+    //        $(".video_chat").css('width', aa * 0.75);
+    //    })
 </script>
 
 </body>
