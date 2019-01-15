@@ -5,27 +5,44 @@
     <title>TVDemo</title>
     <style>
         video, canvas {
+            position: absolute;
             border: 1px solid gray;
+            color: ghostwhite;
             width: 500px;
             height: 500px;
-            border-radius: 50%;
+            border-radius: 25px;
+        }
+
+        #info {
+            position: absolute;
+            border: 1px solid dimgrey;
+            border-radius: 25px;
+            background-color: lightblue;
+            height: 100px;
+            width: 500px;
+            left: 35%;
+            top: 36%;
+            font-family: Monaco;
+            font-size: 20px;
+            text-align: center;
+            line-height: 100px;
         }
     </style>
-    <link href="/css/location.css" rel="stylesheet" type="text/css"/>
+    <link href="css/location.css" rel="stylesheet" type="text/css"/>
 </head>
 <body bgcolor="#778899">
 <div>
-    <h1 style="color: black;position: absolute;left: 45%;top: 10%;">TVDemo1.0</h1>
+    <h1 style="color: black;position: absolute;left: 45%;top: 10%; font-family: Monaco">TV Demo 1.0</h1>
 </div>
 <div>
-    <video autoplay style="position: absolute;left: 35%;top: 20%;color: ghostwhite">
+    <video autoplay style="left:35%;top:30%;">
     </video>
 </div>
 <canvas id="myCanvas" style="position: absolute;left: 1%;display: none;"></canvas>
 <button id="capture" style="position: absolute;left: 30%;top: 55%;display: none"></button>
 <div id="attr" style="position: absolute;right: 200px">
 </div>
-<div class="alert"></div>
+<div id="info" style="display: none"></div>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script type="text/javascript">
 
@@ -38,6 +55,11 @@
 
     function hasUserMedia() {//判断是否支持调用设备api，因为浏览器不同所以判断方式不同哦
         return !!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+    }
+
+    function showInfo(info) {
+        document.getElementById("info").innerHTML = info;
+        $("#info").css("display", "block");
     }
 
     if (hasUserMedia()) {
@@ -57,9 +79,6 @@
         });
         document.querySelector("#capture").addEventListener("click", function (event) {
             if (streaming) {
-//alert(video.clientHeight)
-//canvas.width = video.clientWidth;
-//canvas.height= video.clientHeight;
                 canvas.width = 800;
                 canvas.height = 800;
                 var context = canvas.getContext('2d');
@@ -74,33 +93,27 @@
                 $.post("/user/face", info, function (data) {
                     console.log(data.info);
                     var res = data.info;
-                    if (res == "exist") {
-//                        alert("Welcome!");
-                        window.location.href = "/room";
-                    } else if (res == "create") {
-//                        alert("Successfully created!");
-                        window.location.href = "/room";
+                    var info;
+                    if (res === "exist") {
+                        info = "Welcome";
+                        showInfo(info);
+                        setTimeout("window.location.href = \"/room\"", 2000);
+                    } else if (res === "create") {
+                        info = "Created!";
+                        showInfo(info);
+                        setTimeout("window.location.href = \"/room\"", 2000);
                     } else {
-//                        alert("There's no face detected!");
-                        window.location.reload();
+                        info = "No face detected!";
+                        showInfo(info);
+                        setTimeout("window.location.reload()", 2000);
                     }
-
-// console.log("-----------");
-// console.log(data.faces[0].face_token);
-
-// $("#sex").val(JSON.stringify(data.faces[0].attributes.gender.value))
-// $("#age").val(JSON.stringify(data.faces[0].attributes.age.value))
-// $("#smile").val(JSON.stringify(data.faces[0].attributes.smile.value))
-// $("#emotion").val(JSON.stringify(data.faces[0].attributes.emotion.happiness))
-
-
                 }, "json")
 
 
             }
         })
     } else {
-        alert("浏览器暂不支持")
+        alert("Not support!");
     }
 
 
@@ -108,99 +121,3 @@
 
 </body>
 </html>
-<!--<!DOCTYPE html>-->
-<!--<html lang="ZH-CN">-->
-<!--<head>-->
-<!--<meta charset="utf-8">-->
-<!--<title>²âÊÔ</title>-->
-<!--</head>-->
-
-
-<!--<body>-->
-<!--<div class="booth">-->
-<!--<video id="video" width="400" height="300" muted class="abs"></video>-->
-<!--<canvas id="canvas" width="400" height="300"></canvas>-->
-<!--</div>-->
-<!--<script src="/js/jquery-3.2.1.min.js"></script>-->
-<!--<script src="/js/ccv.js"></script>-->
-<!--<script src="/js/cascade.js"></script>-->
-<!--<script src="/js/jquery.facedetection.js"></script>-->
-<!--<script>-->
-<!--$(function () {-->
-<!--var canvas = document.getElementById('canvas');-->
-<!--var context = canvas.getContext('2d');-->
-<!--var video = document.getElementById('video'),-->
-<!--vendorUrl = window.URL || window.webkitURL;-->
-
-<!--//Ã½Ìå¶ÔÏó-->
-<!--navigator.getMedia = navigator.getUserMedia ||-->
-<!--navagator.webkitGetUserMedia ||-->
-<!--navigator.mozGetUserMedia ||-->
-<!--navigator.msGetUserMedia;-->
-<!--navigator.getMedia({-->
-<!--video: true, //Ê¹ÓÃÉãÏñÍ·¶ÔÏó-->
-<!--audio: false  //²»ÊÊÓÃÒôÆµ-->
-<!--}, function (stream) {-->
-<!--console.log(stream);-->
-<!--video.srcObject = stream;-->
-<!--video.play();-->
-<!--}, function (error) {-->
-<!--});-->
-
-
-<!--var is_stop = 0-->
-<!--video.ontimeupdate = function () {-->
-<!--if (is_stop) return-->
-<!--context.drawImage(video, 0, 0, video.width, video.height);-->
-<!--var imgString = canvas.toDataURL('images/png');-->
-<!--$('#canvas').faceDetection({-->
-<!--complete: function (faces) {-->
-<!--if (faces.length >= 1) {-->
-<!--is_stop = 1;-->
-<!--draw_face_box(faces)-->
-<!--upload(imgString)-->
-
-<!--}-->
-<!--console.log(faces)-->
-<!--}-->
-<!--});-->
-<!--}-->
-
-<!--//»­³öÈËÁ³ÇøÓò-->
-<!--function draw_face_box(faces) {-->
-<!--var rect;-->
-<!--var i;-->
-<!--//context.clearRect(0, 0, canvas.width, canvas.height);-->
-<!--for (i = 0; i < faces.length; i++) {-->
-<!--rect = faces[i];-->
-<!--context.strokeStyle = '#a64ceb';-->
-<!--if (rect.width < 60) return-->
-<!--context.strokeRect(rect.x, rect.y, rect.width, rect.height);-->
-<!--context.font = '11px Helvetica';-->
-<!--context.fillStyle = "#fff";-->
-<!--context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);-->
-<!--context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);-->
-<!--}-->
-<!--}-->
-
-<!--//ÉÏ´«ÈËÁ³Í¼Æ¬-->
-<!--function upload(imgString) {-->
-<!--$.ajax({-->
-<!--"type": "POST",-->
-<!--"url": "/user/face",-->
-<!--"data": {'img': imgString},-->
-<!--'dataType': 'json',-->
-<!--beforeSend: function () {-->
-<!--},-->
-<!--success: function (result) {-->
-<!--console.log(result)-->
-<!--img_path = result.data.file_path-->
-<!--}-->
-<!--});-->
-<!--}-->
-<!--})-->
-
-
-<!--</script>-->
-<!--</body>-->
-<!--</html>-->
