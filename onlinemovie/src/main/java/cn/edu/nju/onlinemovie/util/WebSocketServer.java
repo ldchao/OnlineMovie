@@ -112,7 +112,9 @@ public class WebSocketServer {
      * 实现服务器主动推送
      */
     private void sendMessage(String message) throws IOException {
-        this.session.getBasicRemote().sendText(message);
+        synchronized (this.session) {
+            this.session.getBasicRemote().sendText(message);
+        }
     }
 
 
